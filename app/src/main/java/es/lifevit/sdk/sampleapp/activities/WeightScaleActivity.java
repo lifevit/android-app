@@ -300,7 +300,7 @@ public class WeightScaleActivity extends AppCompatActivity {
                         String unitStr = data.getUnit();
 
                         textview_bmr.setText(String.format("%.1f", data.getBmr()) + " Kcal");
-                        textview_bone.setText(String.format("%.1f", data.getBone()) + " " + unitStr);
+                        textview_bone.setText(String.format("%.1f", data.getBoneRawValue()) + " " + unitStr);
                         textview_fat.setText(String.format("%.1f", data.getFatPercentage()) + " %");
                         textview_muscle.setText(String.format("%.1f", data.getMusclePercentage()) + " %");
                         textview_visceral.setText(String.format("%.1f", data.getVisceralPercentage()) + " %");
