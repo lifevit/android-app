@@ -20,7 +20,7 @@ public class WeightScaleActivity extends AppCompatActivity {
 
 
     TextView textview_connection_result, textview_measurement_info;
-    TextView textview_bmr, textview_bone, textview_fat, textview_muscle, textview_visceral, textview_water, textview_weight, textview_info, textview_protein, textview_bodyage, textview_idealweight, textview_obesity;
+    TextView textview_bmr, textview_bone, textview_fat, textview_muscle, textview_visceral, textview_water, textview_weight, textview_info, textview_protein, textview_bodyage, textview_idealweight, textview_obesity, textview_bia;
 
     Button button_connect, weight_scale_button_clear_results, weight_scale_button_history;
     private CheckBox weight_scale_check_connected;
@@ -29,6 +29,10 @@ public class WeightScaleActivity extends AppCompatActivity {
 
     private String uuid = null;
     private LifevitSDKDeviceListener cl;
+
+    private int HEIGHT = 190;
+    private int AGE = 37
+            ;
 
 //    private boolean started = false;
 //    private Handler handler = new Handler();
@@ -125,6 +129,7 @@ public class WeightScaleActivity extends AppCompatActivity {
         textview_obesity = findViewById(R.id.weight_scale_textview_measurement_obesity);
         textview_idealweight = findViewById(R.id.weight_scale_textview_measurement_idealweight);
         textview_bodyage = findViewById(R.id.weight_scale_textview_measurement_bodyage);
+        textview_bia = findViewById(R.id.weight_scale_textview_measurement_bia);
 
 
         button_connect = findViewById(R.id.weight_scale_button_connect);
@@ -141,7 +146,9 @@ public class WeightScaleActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (isDisconnected) {
                     // Set up device
-                    SDKTestApplication.getInstance().getLifevitSDKManager().setUpWeightScale(LifevitSDKConstants.WEIGHT_SCALE_GENDER_MALE, 35, 190, LifevitSDKConstants.WEIGHT_UNIT_KG);
+                    SDKTestApplication.getInstance().getLifevitSDKManager().setUpWeightScale(LifevitSDKConstants.WEIGHT_SCALE_GENDER_MALE, AGE, HEIGHT, LifevitSDKConstants.WEIGHT_UNIT_KG);
+                    //SDKTestApplication.getInstance().getLifevitSDKManager().setUpWeightScale(LifevitSDKConstants.WEIGHT_SCALE_GENDER_FEMALE, 35, 190, LifevitSDKConstants.WEIGHT_UNIT_KG);
+
                     // Connect
                     if(uuid!=null && weight_scale_check_connected.isChecked()){
                         SDKTestApplication.getInstance().getLifevitSDKManager().connectDevice(LifevitSDKConstants.DEVICE_WEIGHT_SCALE, 100000, uuid);
@@ -173,6 +180,7 @@ public class WeightScaleActivity extends AppCompatActivity {
                 textview_weight.setText("---");
                 textview_bone.setText("---");
                 textview_info.setText("---");
+                textview_bia.setText("---");
             }
         });
     }
@@ -224,7 +232,7 @@ public class WeightScaleActivity extends AppCompatActivity {
                                 textview_connection_result.setTextColor(ContextCompat.getColor(WeightScaleActivity.this, android.R.color.holo_red_dark));
 
                                 // Set up device
-                               SDKTestApplication.getInstance().getLifevitSDKManager().setUpWeightScale(LifevitSDKConstants.WEIGHT_SCALE_GENDER_MALE, 35, 190, LifevitSDKConstants.WEIGHT_UNIT_KG);
+                                SDKTestApplication.getInstance().getLifevitSDKManager().setUpWeightScale(LifevitSDKConstants.WEIGHT_SCALE_GENDER_MALE, AGE, HEIGHT, LifevitSDKConstants.WEIGHT_UNIT_KG);
                                 // Connect
                                 if(uuid!=null && weight_scale_check_connected.isChecked()){
                                     SDKTestApplication.getInstance().getLifevitSDKManager().connectDevice(LifevitSDKConstants.DEVICE_WEIGHT_SCALE, 100000, uuid);
@@ -276,6 +284,7 @@ public class WeightScaleActivity extends AppCompatActivity {
                         textview_idealweight.setText("");
                         textview_obesity.setText("");
                         textview_bodyage.setText("");
+                        textview_bia.setText("---");
 
                         textview_weight.setText(String.format("%.1f %s (measuring)", weight, unit == LifevitSDKConstants.WEIGHT_UNIT_KG ? "Kg" : "Lb"));
                     }
@@ -299,18 +308,25 @@ public class WeightScaleActivity extends AppCompatActivity {
                     public void run() {
                         String unitStr = data.getUnit();
 
-                        textview_bmr.setText(String.format("%.1f", data.getBmr()) + " Kcal");
-                        textview_bone.setText(String.format("%.1f", data.getBoneRawValue()) + " " + unitStr);
-                        textview_fat.setText(String.format("%.1f", data.getFatPercentage()) + " %");
-                        textview_muscle.setText(String.format("%.1f", data.getMusclePercentage()) + " %");
-                        textview_visceral.setText(String.format("%.1f", data.getVisceralPercentage()) + " %");
-                        textview_water.setText(String.format("%.1f", data.getWaterPercentage()) + " %");
-                        textview_protein.setText(String.format("%.1f", data.getProteinPercentage()) + " %");
-                        textview_idealweight.setText(String.format("%.1f", data.getIdealWeight()));
-                        textview_bodyage.setText(String.format("%.1f", data.getBodyAge()));
-                        textview_obesity.setText(String.format("%.1f", data.getObesityPercentage()) + " %");
+                        textview_bmr.setText(String.format("%.2f", data.getBmr()) + " Kcal");
+                        textview_bone.setText(String.format("%.2f", data.getBoneRawValue()) + " " + unitStr);
+                        textview_fat.setText(String.format("%.2f %% - %.2f kg", data.getFatPercentage(), data.getFatRawValue()));
+                        textview_muscle.setText(String.format("%.2f %% - %.2f kg", data.getMusclePercentage(), data.getMuscleRawValue()));
+                        textview_visceral.setText(String.format("%.2f %% - %.2f kg", data.getVisceralPercentage(), data.getVisceralRawValue()));
+                        textview_water.setText(String.format("%.2f %% - %.2f kg", data.getWaterPercentage(), data.getWaterRawValue()));
+                        textview_protein.setText(String.format("%.2f %%", data.getProteinPercentage()) + " %");
+                        textview_idealweight.setText(String.format("%.2f kg", data.getIdealWeight()));
+                        textview_bodyage.setText(String.format("%.2f", data.getBodyAge()));
+                        textview_obesity.setText(String.format("%.2f %%", data.getObesityPercentage()) + " %");
 
-                        textview_weight.setText(String.format("%.1f %s", data.getWeight(), unitStr));
+                        textview_weight.setText(String.format("%.2f %s", data.getWeight(), unitStr));
+                        if(data.getBia()!=null){
+
+                            textview_bia.setText(String.format("%.2f", data.getBia()));
+                        }
+                        else {
+                            textview_bia.setText("---");
+                        }
                     }
                 });
             }
