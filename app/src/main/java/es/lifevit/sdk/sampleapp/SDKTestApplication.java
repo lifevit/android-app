@@ -1,6 +1,7 @@
 package es.lifevit.sdk.sampleapp;
 
 import android.app.Application;
+import android.util.Log;
 
 import es.lifevit.sdk.LifevitSDKManager;
 
@@ -15,6 +16,8 @@ public class SDKTestApplication extends Application {
         super.onCreate();
         instance = this;
         lifevitSDKManager = new LifevitSDKManager(this);
+
+        lifevitSDKManager.setLogLevel(Log.DEBUG);
 
         // startService(new Intent(this, LifeVitTensiService.class));
     }

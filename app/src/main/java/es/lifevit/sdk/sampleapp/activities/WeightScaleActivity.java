@@ -232,7 +232,7 @@ public class WeightScaleActivity extends AppCompatActivity {
                                 textview_connection_result.setTextColor(ContextCompat.getColor(WeightScaleActivity.this, android.R.color.holo_red_dark));
 
                                 // Set up device
-                                SDKTestApplication.getInstance().getLifevitSDKManager().setUpWeightScale(LifevitSDKConstants.WEIGHT_SCALE_GENDER_MALE, AGE, HEIGHT, LifevitSDKConstants.WEIGHT_UNIT_KG);
+                               SDKTestApplication.getInstance().getLifevitSDKManager().setUpWeightScale(LifevitSDKConstants.WEIGHT_SCALE_GENDER_MALE, AGE, HEIGHT, LifevitSDKConstants.WEIGHT_UNIT_KG);
                                 // Connect
                                 if(uuid!=null && weight_scale_check_connected.isChecked()){
                                     SDKTestApplication.getInstance().getLifevitSDKManager().connectDevice(LifevitSDKConstants.DEVICE_WEIGHT_SCALE, 100000, uuid);
